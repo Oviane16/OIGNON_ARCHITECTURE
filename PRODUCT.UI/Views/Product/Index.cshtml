@@ -1,0 +1,108 @@
+﻿<h2>Liste of product</h2>
+@section Style{
+    <link href="~/lib/bootstrap/dist/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+}
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped" id="tableProduct">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Matricule</th>
+                        <th scope="col">Slug</th>
+                        <th scope="col">Date Create</th>
+                        <th scope="col">Date Edit</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    @section scripts{
+    <script src="~/lib/bootstrap/dist/js/jquery.dataTables.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        function bindDatatable() {
+            var table = $('#tableProduct').DataTable({
+                "proccessing": true,
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+
+                "serverSide": true,
+                "searching":false,
+                "ajax": {
+                    url: "@Url.Action("GetGridData", "Product")",
+                    type: 'POST'
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "matricule" },
+                    { "data": "slug" },
+                    { "data": "dateEditStr" },
+                    { "data": "createDateStr" },
+                    {
+                        "render": function (data, row, item) {
+                            return "<a href='#' class='btn btn-default' onclick=Edit('" + item.id + "'); >Edit</a>  <a href='#' class='btn btn-danger'  onclick=ShowDeleteModal(" + item.id + "," + item.id + "); >Delete</a> ";
+                        }
+                    },
+
+                ]
+            });
+        }
+
+        function Edit(id){
+            window.location.href = "Product/Edit/" + id;
+        }
+
+        function ShowDeleteModal(id,name){
+            $('#deleteModal').modal('show');
+            $('#contentModal').empty().append("Are you sure to delete "+ name +"?");
+            $('#idModal').val(id);
+        }
+
+        function Delete(){
+            $.ajax({
+                url: "Product/Delete/" +$("#idModal").val(),
+                type : "GET",
+                success: function () {
+                    ReloadData();
+                }
+            });
+        }
+
+        function ReloadData(){
+            var table = $('#tableProduct').DataTable();
+            table.ajax.reload();
+        }
+    </script>
+}
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h3 class="modal-title">Delete</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <input type="hidden" id="idModal" />
+                <div class="modal-body" >
+                <h1 id="contentModal"></h1>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" type="button" class="btn btn-primary">No</button>
+                    <button data-dismiss="modal" onclick="Delete()" id="yesBtn" type="button" class="btn btn-danger">Yes</button>
+
+                </div>
+            </div>
+        </div>
+    </div>

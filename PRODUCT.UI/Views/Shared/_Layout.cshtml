@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PRODUCT.UI</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.product.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PRODUCT.UI.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @await RenderSectionAsync("Style", required: false)
+
+</head>
+<body>
+    <header>
+           
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <br/>
+            <br/>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index"><button type="button" asp-controller="Product" asp-action="Index" class="btn btn-primary">List</button></a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Create"><button type="button" asp-controller="Product" asp-action="Index" class="btn btn-primary">Create</button></a>
+
+
+            @RenderBody()
+        </main>
+    </div>
+
+@*    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - PRODUCT.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
